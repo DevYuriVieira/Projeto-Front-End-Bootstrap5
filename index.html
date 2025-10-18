@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="pt-br" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard Administrativo</title>
+    <!-- Bootstrap 5 CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Arquivo de estilos customizados -->
+    <link href="style.css" rel="stylesheet">
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_ApprovalStatus msdt:dt="string">0</mso:_ApprovalStatus>
+<mso:_ApprovalAssignedTo msdt:dt="string"></mso:_ApprovalAssignedTo>
+<mso:_ApprovalRespondedBy msdt:dt="string"></mso:_ApprovalRespondedBy>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+
+<body>
+    <!-- Skip link for keyboard users -->
+    <a class="visually-hidden-focusable sr-only" href="#main-content" style="position:absolute;left:8px;top:8px;z-index:2000;padding:8px;background:#0b1220;color:#e6eef8;border-radius:4px;">Pular para o conteúdo</a>
+    <!-- Header com Navbar -->
+    <header>
+        <!-- Navbar do Bootstrap dentro de header -->
+        <nav class="navbar navbar-expand-lg navbar-dark px-3">
+            <div class="container-fluid">
+                <!-- Botão para abrir sidebar como offcanvas em telas pequenas -->
+                <button class="btn btn-outline-light d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="#offcanvasSidebar" aria-label="Abrir menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Logo e nome do sistema -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="me-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="3" fill="#1e3a8a"></rect>
+                        <path d="M7 14L10 9l4 10" stroke="#e6eef8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <strong>AdminDash</strong>
+                </a>
+
+                <div class="d-flex align-items-center ms-auto">
+                    <!-- Notificações (dropdown) -->
+                    <div class="dropdown me-2">
+                        <button id="notifToggle" class="btn btn-sm btn-outline-light position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notificações">
+                            <i class="bi bi-bell-fill" aria-hidden="true"></i>
+                            <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none" style="width:10px;height:10px;"></span>
+                        </button>
+                        <div id="notifDropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2" style="min-width:320px;">
+                            <div class="d-flex justify-content-between align-items-center px-2 mb-2">
+                                <strong>Notificações</strong>
+                                <div>
+                                    <button id="markAllRead" class="btn btn-sm btn-link text-decoration-none text-muted me-2">Marcar todas</button>
+                                    <button id="clearNotifs" class="btn btn-sm btn-link text-decoration-none text-danger">Limpar</button>
+                                </div>
+                            </div>
+                            <div id="notifList" class="list-group list-group-flush" style="max-height:240px; overflow:auto;"></div>
+                            <div class="dropdown-divider"></div>
+                            <div class="px-2 text-end"><a href="#" id="viewAllNotifs" class="link-light small">Ver todas</a></div>
+                        </div>
+                    </div>
+
+                    <!-- Mensagens (dropdown) -->
+                    <div class="dropdown me-3">
+                        <button id="msgToggle" class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Mensagens">
+                            <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
+                        </button>
+                        <div id="msgDropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2" style="min-width:320px;">
+                            <div class="d-flex justify-content-between align-items-center px-2 mb-2">
+                                <strong>Mensagens</strong>
+                                <div>
+                                    <button id="markAllMsgRead" class="btn btn-sm btn-link text-decoration-none text-muted me-2">Marcar todas</button>
+                                    <button id="clearMsgs" class="btn btn-sm btn-link text-decoration-none text-danger">Limpar</button>
+                                </div>
+                            </div>
+                            <div id="msgList" class="list-group list-group-flush" style="max-height:240px; overflow:auto;"></div>
+                            <div class="dropdown-divider"></div>
+                            <div class="px-2 text-end"><a href="#" id="viewAllMsgs" class="link-light small">Ver todas</a></div>
+                        </div>
+                    </div>
+                    <!-- Botão de login / usuário (dinâmico) -->
+                    <div id="authArea">
+                        <button id="btnLoginOpen" class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal" data-bs-target="#authModal">Entrar</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar fixa à esquerda (visível em lg+) -->
+            <aside class="sidebar col-lg-2 d-none d-lg-block">
+                <!-- Conteúdo da sidebar: navegação principal -->
+                    <nav class="nav flex-column px-3">
+                    <!-- Link ativo padrão para "Início" (aponta para #inicio) -->
+                    <a class="nav-link active mb-2" href="#inicio">Início</a>
+                    <a class="nav-link mb-2" href="#usuarios">Usuários</a>
+                    <a class="nav-link mb-2" href="#relatorios">Relatórios</a>
+                    <!-- Abrir modal de configurações -->
+                    <a class="nav-link mb-2" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Configurações</a>
+                </nav>
+
+                <!-- Pequeno rodapé dentro da sidebar (mostra usuário e status) -->
+                <div class="mt-auto px-3" style="position: absolute; bottom: 1rem; left: 0; right: 0;">
+                    <div class="d-flex align-items-center">
+                        <div class="me-2" style="width:36px; height:36px; border-radius:50%; background:rgba(230,238,248,0.06); display:flex; align-items:center; justify-content:center;">
+                            <i class="bi bi-person-fill" style="color:var(--muted);"></i>
+                        </div>
+                        <div>
+                            <div class="small text-white" id="sidebarUserName">Admin</div>
+                            <div class="small text-muted" id="sidebarUserStatus"><span id="userStatusDot" style="width:8px;height:8px;display:inline-block;background:#10b981;border-radius:50%;margin-right:6px;vertical-align:middle;"></span><span id="sidebarUserText">Online</span></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Offcanvas sidebar para dispositivos pequenos -->
+            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Menu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <!-- Mobile: show current user and status at top of offcanvas -->
+                    <div class="mb-3 d-flex align-items-center">
+                        <button id="offcanvasAuthBtn" class="btn btn-sm btn-outline-light me-2" type="button" aria-controls="authModal" aria-expanded="false" title="Entrar">
+                            <i class="bi bi-person-fill" aria-hidden="true"></i>
+                        </button>
+                        <div>
+                            <div class="small text-white" id="offcanvasUserName">Admin</div>
+                            <div class="small text-muted"><span id="offUserStatusDot" style="width:8px;height:8px;display:inline-block;background:#10b981;border-radius:50%;margin-right:6px;vertical-align:middle;"></span><span id="offcanvasUserText">Online</span></div>
+                        </div>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#inicio">Início</a>
+                        <a class="nav-link" href="#usuarios">Usuários</a>
+                        <a class="nav-link" href="#relatorios">Relatórios</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Configurações</a>
+                    </nav>
+                    <!-- Offcanvas footer: quick access to authentication (mobile) -->
+                    <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center" style="position:relative;">
+                        <div class="small text-muted">Conta</div>                        
+                        <!-- Área de autenticação dinâmica para o rodapé do offcanvas -->
+                        <div id="offcanvasAuthFooterArea">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área principal de conteúdo -->
+            <main class="col-lg-10 ms-sm-auto px-0 content-area">
+                <div class="container-fluid">
+                <!-- Linha de cards com métricas -->
+                    <section id="inicio" class="mb-4">
+                        <!-- Título e descrição da página -->
+                        <div class="page-title">
+                            <h1 class="h3">Painel Administrativo</h1>
+                            <p class="page-description">Visão geral das métricas principais. Use os links na barra lateral para navegar entre as seções.</p>
+                        </div>
+                        <!-- Usamos row e col para responsividade; cada card ocupa 12 col-sm, 6 col-md e 3 col-lg para formar 4 por linha em telas grandes -->
+                        <div class="row g-3">
+                            <!-- Card 1: Usuários -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                <div class="card bg-dark-panel text-white h-100 p-3 metric-card variant-1">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <small class="text-muted">Usuários</small>
+                                            <h4 class="mb-0">1.245</h4>
+                                        </div>
+                                        <div class="ms-3 text-center" style="width:48px; height:48px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:center; justify-content:center;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Usuários"><i class="bi bi-people-fill" style="font-size:1.2rem;color: #e6eef8;" aria-hidden="true"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Vendas -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                <div class="card bg-dark-panel text-white h-100 p-3 metric-card variant-2">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <small class="text-muted">Vendas</small>
+                                            <h4 class="mb-0">R$ 92.400</h4>
+                                        </div>
+                                        <div class="ms-3 text-center" style="width:48px; height:48px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:center; justify-content:center;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Vendas"><i class="bi bi-cash-stack" style="font-size:1.2rem;color:#e6eef8;" aria-hidden="true"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Lucros -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                <div class="card bg-dark-panel text-white h-100 p-3 metric-card variant-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <small class="text-muted">Lucros</small>
+                                            <h4 class="mb-0">R$ 24.800</h4>
+                                        </div>
+                                        <div class="ms-3 text-center" style="width:48px; height:48px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:center; justify-content:center;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lucros"><i class="bi bi-graph-up" style="font-size:1.2rem;color:#e6eef8;" aria-hidden="true"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Pedidos -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                <div class="card bg-dark-panel text-white h-100 p-3 metric-card variant-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <small class="text-muted">Pedidos</small>
+                                            <h4 class="mb-0">682</h4>
+                                        </div>
+                                        <div class="ms-3 text-center" style="width:48px; height:48px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:center; justify-content:center;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Pedidos"><i class="bi bi-box-seam" style="font-size:1.2rem;color:#e6eef8;" aria-hidden="true"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Tabela de exemplo: últimos usuários cadastrados -->
+                    <section id="usuarios" class="mb-4">
+                        <div class="card bg-dark-panel text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Últimos usuários cadastrados</h5>
+                                    <small class="text-muted">Atualizado agora</small>
+                                </div>
+
+                                <!-- Tabela responsiva usando table-responsive para scroll em pequenas larguras -->
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped align-middle mb-0">
+                                        <thead class="text-muted small">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Nome</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Data</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td>Mariana Silva</td>
+                                                <td>mariana.silva@example.com</td>
+                                                <td>10/10/2025</td>
+                                                <td><span class="badge bg-success">Ativo</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">2</th>
+                                                <td>Carlos Souza</td>
+                                                <td>carlos.souza@example.com</td>
+                                                <td>09/10/2025</td>
+                                                <td><span class="badge bg-secondary">Pendente</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>Ana Pereira</td>
+                                                <td>ana.pereira@example.com</td>
+                                                <td>08/10/2025</td>
+                                                <td><span class="badge bg-success">Ativo</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">4</th>
+                                                <td>João Lima</td>
+                                                <td>joao.lima@example.com</td>
+                                                <td>07/10/2025</td>
+                                                <td><span class="badge bg-danger">Bloqueado</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Seção de relatórios com gráficos -->
+                    <section id="relatorios" class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-8">
+                                <div class="card bg-dark-panel text-white p-3 h-100">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">Vendas (últimos 12 meses)</h6>
+                                        <!-- Canvas para gráfico de linhas -->
+                                        <canvas id="chartVendas" height="140"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <div class="card bg-dark-panel text-white p-3 h-100">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">Fontes de tráfego</h6>
+                                        <!-- Canvas para gráfico de pizza -->
+                                        <canvas id="chartFontes" height="140"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nova linha para gráficos adicionais -->
+                        <div class="row g-3 mt-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="card bg-dark-panel text-white p-3 h-100">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">Taxa de Conversão (últimos 7 dias)</h6>
+                                        <canvas id="chartConversoes" height="140"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card bg-dark-panel text-white p-3 h-100">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">Receita por Canal</h6>
+                                        <canvas id="chartReceitaCanal" height="140"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Observações / espaço extra (Configurações agora em modal) -->
+                    <section id="configuracoes">
+                        <div class="card bg-dark-panel text-white p-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Configurações</h5>
+                                <p class="text-muted small mb-3">Abra o modal de configurações para ajustar preferências do painel.</p>
+                                <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#settingsModal">Abrir configurações</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Modal de Configurações (reutiliza os ids de input) -->
+                    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content bg-dark text-white">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="settingsModalLabel">Configurações</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                          </div>
+                          <div class="modal-body">
+                            <p class="text-muted small mb-3">Ajuste preferências do painel. As alterações podem ser salvas localmente no seu navegador.</p>
+                            <form id="settingsForm" class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small">Notificações</label>
+                                    <select id="settingNotifications" class="form-select form-select-sm">
+                                        <option value="on">Ativas</option>
+                                        <option value="off">Desativadas</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small">Cor de destaque</label>
+                                    <input id="settingAccent" type="color" class="form-control form-control-color form-control-sm" value="#1e3a8a" title="Escolher cor de destaque">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small">Itens por página (tabela)</label>
+                                    <select id="settingPageSize" class="form-select form-select-sm">
+                                        <option value="4">4</option>
+                                        <option value="6">6</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12 d-flex gap-2 align-items-center">
+                                    <button id="saveSettings" type="button" class="btn btn-sm btn-primary">Salvar</button>
+                                    <button id="resetSettings" type="button" class="btn btn-sm btn-outline-light">Restaurar padrão</button>
+                                    <button id="testNotification" type="button" class="btn btn-sm btn-outline-info ms-auto">Testar notificação</button>
+                                </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                        </div>
+
+                <!-- Modal de Autenticação (Entrar / Cadastrar / Esqueci) -->
+                <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content bg-dark text-white">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="authModalLabel">Autenticar</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+                                    <li class="nav-item" role="presentation"><button class="nav-link active" id="tab-login" data-bs-toggle="tab" data-bs-target="#pane-login" type="button" role="tab">Entrar</button></li>
+                                    <li class="nav-item" role="presentation"><button class="nav-link" id="tab-register" data-bs-toggle="tab" data-bs-target="#pane-register" type="button" role="tab">Cadastrar</button></li>
+                                    <li class="nav-item" role="presentation"><button class="nav-link" id="tab-forgot" data-bs-toggle="tab" data-bs-target="#pane-forgot" type="button" role="tab">Esqueci senha</button></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="pane-login" role="tabpanel">
+                                        <form id="formLogin" class="row g-2">
+                                            <div class="col-12"><label class="form-label small">Email</label><input id="loginEmail" type="email" class="form-control form-control-sm" required></div>
+                                            <div class="col-12"><label class="form-label small">Senha</label><input id="loginPassword" type="password" class="form-control form-control-sm" required></div>
+                                            <div class="invalid-feedback" id="loginFeedback" style="display:none;"></div>
+                                            <div class="col-12 d-flex justify-content-between align-items-center"><div><input id="loginRemember" type="checkbox"> <label class="small">Lembrar</label></div><button class="btn btn-sm btn-primary" type="submit">Entrar</button></div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="pane-register" role="tabpanel">
+                                        <form id="formRegister" class="row g-2">
+                                            <div class="col-12"><label class="form-label small">Nome</label><input id="regName" type="text" class="form-control form-control-sm" required></div>
+                                            <div class="col-12"><label class="form-label small">Email</label><input id="regEmail" type="email" class="form-control form-control-sm" required><div class="invalid-feedback" id="regEmailFeedback" style="display:none;"></div></div>
+                                            <div class="col-12"><label class="form-label small">Senha</label><input id="regPassword" type="password" class="form-control form-control-sm" required><div class="invalid-feedback" id="regPasswordFeedback" style="display:none;"></div></div>
+                                            <div class="col-12"><label class="form-label small">Confirmar senha</label><input id="regPasswordConfirm" type="password" class="form-control form-control-sm" required><div class="invalid-feedback" id="regPasswordConfirmFeedback" style="display:none;"></div></div>
+                                            <div class="col-12 d-flex justify-content-end"><button class="btn btn-sm btn-outline-light" type="button" id="btnCancelRegister" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-sm btn-primary ms-2" type="submit">Cadastrar</button></div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="pane-forgot" role="tabpanel">
+                                        <form id="formForgot" class="row g-2">
+                                            <div class="col-12"><label class="form-label small">Email cadastrado</label><input id="forgotEmail" type="email" class="form-control form-control-sm" required></div>
+                                            <div class="col-12"><div class="invalid-feedback" id="forgotEmailFeedback" style="display:none;"></div></div>
+                                            <div class="col-12 d-flex justify-content-end"><button class="btn btn-sm btn-outline-light" type="button" data-bs-dismiss="modal">Fechar</button><button class="btn btn-sm btn-primary ms-2" type="submit">Enviar instruções</button></div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Toast container (toasts gerados dinamicamente) -->
+                <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;"></div>
+                </div>
+
+                <!-- Rodapé simples -->
+                <footer class="footer mt-4">
+                    <div class="container-fluid d-flex justify-content-between align-items-center">
+                        <small>&copy; 2025 AdminDash. Todos os direitos reservados.</small>
+                        <small class="text-muted">Versão 1.0</small>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS (Popper + Bootstrap) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chart.js will be lazy-loaded by main.js when the Relatórios section becomes visible -->
+    <!-- Main JS (charts, tabela, navegação) -->
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+:root {
+    --bg-dark: #0f1720; /* fundo geral */
+    --panel-dark: #111827; /* paineis */
+    --muted: #cbd5e1; /* texto secundário (mais contraste) */
+    --accent: #1e3a8a; /* tom azul escuro */
+}
+
+html, body {
+    height: 100%;
+    background-color: var(--bg-dark);
+    color: #e6eef8;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Header/navbar estilizado */
+header .navbar {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+}
+
+/* Sidebar fixa (sticky) - permanece visível em desktop enquanto o conteúdo rola */
+.sidebar {
+    min-width: 240px;
+    max-width: 240px;
+    background: var(--panel-dark);
+    /* sidebar fica sticky em desktop; em telas pequenas ela vira offcanvas */
+    position: sticky;
+    top: 56px; /* desloca abaixo do header */
+    height: calc(100vh - 56px);
+    padding-top: 1rem;
+    border-right: 1px solid rgba(255,255,255,0.03);
+    overflow-y: auto; /* permite rolagem interna se necessário */
+}
+
+.sidebar a {
+    color: #dbeafe;
+}
+
+.sidebar .nav-link.active {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 0.5rem;
+}
+
+main.content-area {
+    padding: 1.5rem;
+    min-height: calc(100vh - 56px);
+    padding-top: 80px; /* offset for fixed navbar */
+}
+
+/* Garante que as seções tenham espaço suficiente para rolagem e offset para o header fixo */
+main.content-area section {
+    scroll-margin-top: 80px; /* evita que o header cubra o topo da seção ao rolar */
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    min-height: 60vh; /* aumenta a altura do site para permitir navegação entre âncoras */
+}
+
+.card.bg-dark-panel {
+    background: linear-gradient(0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Faixas coloridas no topo dos cards de métricas */
+.metric-card {
+    position: relative;
+    overflow: hidden;
+}
+.metric-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 6px;
+    width: 100%;
+    background: var(--accent);
+    opacity: 0.95;
+}
+.metric-card.variant-1::before { background: #1e3a8a; } /* azul */
+.metric-card.variant-2::before { background: #0ea5a6; } /* teal */
+.metric-card.variant-3::before { background: #7c3aed; } /* roxo */
+.metric-card.variant-4::before { background: #0ea5a6; } /* outra cor */
+
+/* Título grande na área principal */
+.page-title {
+    margin-bottom: 1rem;
+}
+.page-description {
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+}
+
+/* Aumenta contraste para textos 'muted' em todo o site (mantém tema escuro)
+   - usa uma tonalidade mais clara e um leve sombreamento para legibilidade */
+.text-muted, small.text-muted {
+    color: var(--muted) !important;
+    opacity: 0.95; /* garantir visibilidade em fundos escuros */
+}
+
+footer.footer {
+    background: transparent;
+    color: var(--muted);
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.02);
+}
+
+/* Responsividade: esconder sidebar em telas pequenas e usar offcanvas */
+@media (max-width: 991.98px) {
+    .sidebar { display: none; }
+}
+
+/* Responsividade: esconder sidebar em telas pequenas e usar offcanvas */
+@media (max-width: 991.98px) {
+    .sidebar { display: none; }
+}
+
+/* Tablet breakpoint: 1024px and 768px adjustments */
+@media (max-width: 1024px) {
+    /* slightly reduce sidebar width/padding when visible */
+    .sidebar { min-width: 220px; max-width: 220px; }
+    main.content-area { padding-top: 76px; }
+}
+
+@media (max-width: 768px) {
+    main.content-area { padding-top: 72px; }
+    /* canvases should fill container width on small screens */
+    canvas { width: 100% !important; height: auto !important; }
+}
+
+/* Ensure charts are responsive and adapt to available width */
+canvas { max-width: 100%; height: auto; }
+
+/* Ajuste para container de toasts */
+#toastContainer .toast {
+    background: rgba(17,24,39,0.95);
+    color: #e6eef8;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Pequeno padding extra para modal inputs em dark */
+.modal .form-control, .modal .form-select { background: #0b1220; color: #e6eef8; border-color: rgba(255,255,255,0.04); }
