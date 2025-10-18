@@ -3,7 +3,9 @@
 [![Demo](https://img.shields.io/badge/demo-GitHub%20Pages-blue)](https://your-username.github.io/your-repo)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 
-![screenshot](assets/screenshot.svg)
+<p align="center">
+  <img src="dashboards.png" alt="Dashboard Preview" width="80%">
+</p>
 
 > Protótipo responsivo de painel administrativo — pronto para apresentação em portfólio. Inclui gráficos interativos, tabelas com filtro/paginação, autenticação simulada e um sistema de notificações.
 
