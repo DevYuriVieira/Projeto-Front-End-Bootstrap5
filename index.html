@@ -29,12 +29,7 @@
         <!-- Navbar do Bootstrap dentro de header -->
         <nav class="navbar navbar-expand-lg navbar-dark px-3">
             <div class="container-fluid">
-                <!-- Botão para abrir sidebar como offcanvas em telas pequenas -->
-                <button class="btn btn-outline-light d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="#offcanvasSidebar" aria-label="Abrir menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Logo e nome do sistema -->
+                <!-- Logo -->
                 <a class="navbar-brand d-flex align-items-center" href="#">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="me-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <rect x="3" y="3" width="18" height="18" rx="3" fill="#1e3a8a"></rect>
@@ -43,14 +38,15 @@
                     <strong>AdminDash</strong>
                 </a>
 
+                <!-- Ícones e botão de menu (agrupados à direita) -->
                 <div class="d-flex align-items-center ms-auto">
                     <!-- Notificações (dropdown) -->
                     <div class="dropdown me-2">
-                        <button id="notifToggle" class="btn btn-sm btn-outline-light position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notificações">
+                        <button id="notifToggle" class="btn btn-sm btn-outline-light position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Notificações">
                             <i class="bi bi-bell-fill" aria-hidden="true"></i>
                             <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none" style="width:10px;height:10px;"></span>
                         </button>
-                        <div id="notifDropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2" style="min-width:320px;">
+                        <div id="notifDropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2">
                             <div class="d-flex justify-content-between align-items-center px-2 mb-2">
                                 <strong>Notificações</strong>
                                 <div>
@@ -65,11 +61,11 @@
                     </div>
 
                     <!-- Mensagens (dropdown) -->
-                    <div class="dropdown me-3">
-                        <button id="msgToggle" class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Mensagens">
+                    <div class="dropdown me-2">
+                        <button id="msgToggle" class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Mensagens">
                             <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
                         </button>
-                        <div id="msgDropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2" style="min-width:320px;">
+                        <div id="msgDropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2">
                             <div class="d-flex justify-content-between align-items-center px-2 mb-2">
                                 <strong>Mensagens</strong>
                                 <div>
@@ -84,8 +80,13 @@
                     </div>
                     <!-- Botão de login / usuário (dinâmico) -->
                     <div id="authArea">
-                        <button id="btnLoginOpen" class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal" data-bs-target="#authModal">Entrar</button>
+                        <!-- Conteúdo dinâmico (Entrar/Sair) -->
                     </div>
+
+                    <!-- Botão para abrir sidebar (offcanvas) em telas pequenas -->
+                    <button class="btn btn-outline-light d-lg-none ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="#offcanvasSidebar" aria-label="Abrir menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 </div>
             </div>
         </nav>

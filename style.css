@@ -23,6 +23,12 @@ header .navbar {
     z-index: 1100;
 }
 
+/* Garante que os ícones da direita na navbar não quebrem o layout em mobile */
+.navbar .d-flex.ms-auto {
+    flex-shrink: 0;
+}
+
+
 /* Sidebar fixa (sticky) - permanece visível em desktop enquanto o conteúdo rola */
 .sidebar {
     min-width: 240px;
